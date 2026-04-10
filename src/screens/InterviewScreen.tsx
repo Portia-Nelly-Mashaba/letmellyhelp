@@ -4,7 +4,6 @@ import { GlassCard } from '../components/GlassCard';
 import { InterviewDock } from '../components/InterviewDock';
 import { MellyAvatar } from '../components/MellyAvatar';
 import { QuestionTimeline } from '../components/QuestionTimeline';
-import { SkillRadarChart } from '../components/SkillRadarChart';
 import { WorkScorePanel } from '../components/WorkScorePanel';
 import { useViewportWidth } from '../hooks/useViewportWidth';
 import {
@@ -23,7 +22,6 @@ import type {
   InterviewType,
   MellyMood,
   PersonalityId,
-  RadarScores,
   SkillHeatmap,
   WorkScores,
 } from '../types';
@@ -42,19 +40,6 @@ function avgToWorkScores(avg: number): WorkScores {
     opportunistic: Math.min(100, p - 8),
     businessAccount: Math.min(100, p + 4),
     closing: Math.min(100, p - 14),
-  };
-}
-
-function avgToRadar(avg: number): RadarScores {
-  const base = Math.round((avg / 10) * 100);
-  return {
-    professionalism: Math.max(5, base - 4),
-    attitude: Math.max(5, base),
-    creativity: Math.max(5, base - 10),
-    communication: Math.max(5, base - 2),
-    leadership: Math.max(5, base - 12),
-    teamwork: Math.max(5, base - 6),
-    sociability: Math.max(5, base - 8),
   };
 }
 
@@ -127,7 +112,6 @@ export function InterviewScreen({
   }, [scoreTrail]);
 
   const liveWork = avgToWorkScores(avgScore);
-  const liveRadar = avgToRadar(avgScore);
   const liveHeat = avgToHeatmap(avgScore, interviewType);
 
   const buildSession = (
@@ -591,11 +575,10 @@ export function InterviewScreen({
           }}>
           <WorkScorePanel scores={liveWork} />
           <GlassCard style={{ flex: 1 }}>
-            <div style={{ color: colors.text, fontWeight: 800, fontSize: 15 }}>Interview pulse</div>
+            <div style={{ color: colors.text, fontWeight: 800, fontSize: 15 }}>Skill preview</div>
             <div style={{ color: colors.textMuted, fontSize: 12, marginBottom: 8 }}>
-              Radar preview updates as you finish answers.
+              Heatmap updates as you finish each answer.
             </div>
-            <SkillRadarChart scores={liveRadar} size={200} />
             <HeatmapSkills heatmap={liveHeat} noWrap />
           </GlassCard>
         </div>

@@ -114,13 +114,15 @@ redFlags: phrases that sound risky to employers (vague, negative, unprofessional
     const text = await generateText(system, user);
     const parsed = parseModelJson<AnswerFeedback>(text);
     const score = Math.min(10, Math.max(1, Number(parsed.score) || 5));
+    let note = typeof parsed.recruiterNote === 'string' ? parsed.recruiterNote.trim() : '';
+    if (/offline heuristic|EXPO_PUBLIC_GEMINI|add .*GEMINI.*api/i.test(note)) note = '';
     return {
       score,
       whatWasGood: parsed.whatWasGood || '—',
       whatToImprove: parsed.whatToImprove || '—',
       suggestedAnswer: parsed.suggestedAnswer || '—',
       redFlags: Array.isArray(parsed.redFlags) ? parsed.redFlags : [],
-      recruiterNote: parsed.recruiterNote,
+      recruiterNote: note || undefined,
     };
   } catch {
     const score = heuristicScore(args.answer);
@@ -131,8 +133,6 @@ redFlags: phrases that sound risky to employers (vague, negative, unprofessional
       whatToImprove: t.whatToImprove,
       suggestedAnswer: t.suggestedAnswer,
       redFlags: [],
-      recruiterNote:
-        'Offline heuristic scoring — add EXPO_PUBLIC_GEMINI_API_KEY for recruiter-style nuance.',
     };
   }
 }

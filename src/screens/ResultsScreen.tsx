@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { HeatmapSkills } from '../components/HeatmapSkills';
 import { GlassCard } from '../components/GlassCard';
 import { MellyAvatar } from '../components/MellyAvatar';
-import { SkillRadarChart } from '../components/SkillRadarChart';
 import { WorkScorePanel } from '../components/WorkScorePanel';
 import { speakBrowser, stopBrowserSpeech } from '../utils/speechWeb';
 import { colors } from '../theme';
@@ -111,18 +110,7 @@ export function ResultsScreen({
 
         <HeatmapSkills heatmap={insights.heatmap} />
 
-        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-          <WorkScorePanel scores={insights.workScores} />
-          <GlassCard style={{ flex: 1, minWidth: 260 }}>
-            <div style={{ color: colors.text, fontWeight: 800, fontSize: 16, marginBottom: 6 }}>
-              Soft-skill radar
-            </div>
-            <p style={{ color: colors.textMuted, fontSize: 12, lineHeight: '17px', marginTop: 0 }}>
-              Same seven axes hiring managers scan quickly.
-            </p>
-            <SkillRadarChart scores={insights.radar} size={220} />
-          </GlassCard>
-        </div>
+        <WorkScorePanel scores={insights.workScores} />
 
         <GlassCard>
           <div style={{ color: colors.text, fontWeight: 800, fontSize: 16, marginBottom: 6 }}>
